@@ -14,20 +14,16 @@ def write_pairs(pairs, students, special_students):
             file.write("\n")
 
 def gen_pairs(list, is_special):
-    pair_indices = create_indices_pairs(len(list))
-    return [(x, is_special) for x in pair_indices]
-
-def get_pairs(list):
     if len(list) <= 3:
-        pairs = [tuple(list)]
+        pairs = [(tuple(list), is_special)]
     else:
-        pairs = [(list[0], list[1])] + get_pairs(list[2:])
+        pairs = [((list[0], list[1]), is_special)] + gen_pairs(list[2:], is_special)
     return pairs
 
-def create_indices_pairs(n):
+def create_indices_pairs(n, is_special):
     numbers = list(range(n))
     random.shuffle(numbers)
-    return get_pairs(numbers)
+    return gen_pairs(numbers, is_special)
 
 def parse_file(file):
     students = []
@@ -73,12 +69,16 @@ def main():
         special_students.clear()
 
     if special_students:
+        # remove special students from students
         students = list(filter(lambda item: item not in set(special_students), students))
-        combined_pairs = gen_pairs(students, False) + gen_pairs(special_students, True)
+
+        # create one combined shuffled list
+        combined_pairs = create_indices_pairs(len(students), False) + create_indices_pairs(len(special_students), True)
         random.shuffle(combined_pairs)
+
         write_pairs(combined_pairs, students, special_students)
     else:
-        student_pairs = gen_pairs(list(filter(lambda item: item not in set(special_students), students)), False)
+        student_pairs = create_indices_pairs(len(students), False)
         write_pairs(student_pairs, students, special_students)
 
 
