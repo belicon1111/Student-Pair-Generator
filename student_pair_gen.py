@@ -7,7 +7,7 @@ def write_pairs(pairs, students, special_students):
         file.write(f"Generated on: {formatted_datetime}")
         file.write("\n")
         for pair in pairs:
-            if pair[1] == True and special_students:
+            if pair[1] == True:
                 file.write(f"{special_students[pair[0][0]]} , {special_students[pair[0][1]]}")
             else:
                 file.write(f"{students[pair[0][0]]} , {students[pair[0][1]]}")
@@ -72,11 +72,11 @@ def main():
         # remove special students from students
         students = list(filter(lambda item: item not in set(special_students), students))
 
-        # create one combined shuffled list
+        # create one combined shuffled list of indicies pair
         combined_pairs = create_indices_pairs(len(students), False) + create_indices_pairs(len(special_students), True)
         random.shuffle(combined_pairs)
 
-        write_pairs(combined_pairs, students, special_students)
+        write_pairs(combined_pairs, students, special_students) 
     else:
         student_pairs = create_indices_pairs(len(students), False)
         write_pairs(student_pairs, students, special_students)
