@@ -81,6 +81,5 @@ def main():
         student_pairs = create_indices_pairs(len(students), False)
         write_pairs(student_pairs, students, special_students)
 
-
 if __name__ == "__main__":
     main()
